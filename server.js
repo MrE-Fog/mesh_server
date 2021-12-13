@@ -1,11 +1,19 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const https = require('https');
+const fs = require('fs');
 
+
+const options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('certificate.crt')
+};
 const app = express();
 
+
 var corsOptions = {
-    origin: "http://localhost:8081"
+    origin: "https://localhost:8081"
 };
 
 app.use(cors(corsOptions));
@@ -38,9 +46,19 @@ app.get("/", (req, res) => {
     res.json({ message: "Welcome to bezkoder application." });
 });
 
+
+
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
+
+const PORT_SSL = process.env.PORT || 8443;
+https.createServer(options, app).listen(PORT_SSL, () => {
+    console.log(`Server is running on port ${PORT_SSL}.`);
+});
+
+
+
 
