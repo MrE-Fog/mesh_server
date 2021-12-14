@@ -54,7 +54,7 @@ db.mongoose
 //     console.log(`Server is running on port ${PORT}.`);
 // });
 
-const PORT_SSL = process.env.PORT || 8443;
+const PORT_SSL = process.env.PORT || 443;
 https.createServer(options, app).listen(PORT_SSL, () => {
     console.log(`Server is running on port ${PORT_SSL}.`);
 });
