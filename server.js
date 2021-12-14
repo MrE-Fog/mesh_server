@@ -42,17 +42,17 @@ db.mongoose
 
 
 // simple route
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to bezkoder application." });
-});
+// app.get("/", (req, res) => {
+//     res.json({ message: "Welcome to bezkoder application." });
+// });
 
 
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-});
+// const PORT = process.env.PORT || 8080;
+// app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}.`);
+// });
 
 const PORT_SSL = process.env.PORT || 8443;
 https.createServer(options, app).listen(PORT_SSL, () => {
