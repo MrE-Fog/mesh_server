@@ -5,10 +5,17 @@ const https = require('https');
 const fs = require('fs');
 
 
+// const options = {
+//     key: fs.readFileSync('key.pem'),
+//     cert: fs.readFileSync('certificate.crt')
+// };
+
 const options = {
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('certificate.crt')
+    key: fs.readFileSync('certificates/dashu.key'),
+    cert: fs.readFileSync('certificates/mesh_dashu_coffee.crt'),
+    ca: fs.readFileSync('certificates/mesh_dashu_coffee.ca-bundle')
 };
+
 const app = express();
 
 
@@ -42,9 +49,9 @@ db.mongoose
 
 
 // simple route
-// app.get("/", (req, res) => {
-//     res.json({ message: "Welcome to bezkoder application." });
-// });
+app.get("/", (req, res) => {
+    res.json({ message: "Welcome to bezkoder application." });
+});
 
 
 
