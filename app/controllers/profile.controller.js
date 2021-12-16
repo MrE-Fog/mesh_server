@@ -12,21 +12,22 @@ s3.config.update({accessKeyId: config.accessKeyId, secretAccessKey: config.secre
 
 
 exports.ProfileImageLink = (req, res) => {
-    User.findById(req.userId).exec((err, user) => {
+    User.findById(req.userId).exec(async (err, user) => {
         if (err) {
-            res.status(500).send({ message: err });
+            res.status(500).send({message: err});
             return;
         }
 
         if (!user) {
-            res.status(500).send({ message: "User Not Found" });
+            res.status(500).send({message: "User Not Found"});
             return;
         }
 
         profileImageURI = ""
         if (!user.profileImage) {
             profileImageURI = uuid.v4();
-            User.updateOne({"_id": req.userId}, {$set: {"profileImage": profileImageURI}}, {upsert: true})
+            user.profileImage = profileImageURI;
+            await user.save();
         } else {
             profileImageURI = user.profileImage
         }
@@ -36,7 +37,7 @@ exports.ProfileImageLink = (req, res) => {
             Bucket: 'ProfileImages', // your bucket name
 
 
-            Key:  profileImageURI, // this generates a unique identifier
+            Key: profileImageURI, // this generates a unique identifier
             Expires: 100, // number of seconds in which image must be posted
             // ContentType: 'image/jpeg' // must match "Content-Type" header of Alamofire PUT request
 
