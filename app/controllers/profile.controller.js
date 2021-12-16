@@ -26,7 +26,7 @@ exports.ProfileImageLink = (req, res) => {
         profileImageURI = ""
         if (!user.profileImage) {
             profileImageURI = uuid.v4();
-            User.updateOne({"_id": req.userId}, {"profileImage": profileImageURI}, {upsert: true})
+            User.updateOne({"_id": req.userId}, {$set: {"profileImage": profileImageURI}}, {upsert: true})
         } else {
             profileImageURI = user.profileImage
         }
