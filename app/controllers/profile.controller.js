@@ -1,8 +1,17 @@
 const db = require("../models");
+var aws = require('aws-sdk');
+var config = require("../config/auth.config")
+var uuid = require('uuid');
+
 const User = db.user;
 
+aws.config.signatureVersion = 'v4'
+var ep = new aws.Endpoint('https://mesh-storage.sfo3.digitaloceanspaces.com');
+var s3 = new aws.S3({endpoint: ep});
+s3.config.update({accessKeyId: config.accessKeyId, secretAccessKey: config.secretAccessKey});
 
-exports.updateProfileImage = (req, res) => {
+
+exports.ProfileImageLink = (req, res) => {
     User.findById(req.userId).exec((err, user) => {
         if (err) {
             res.status(500).send({ message: err });
@@ -14,8 +23,18 @@ exports.updateProfileImage = (req, res) => {
             return;
         }
 
-        user.update({"profileImageLink": req.body.imageURL});
-        res.send({message: "Profile Picture Updated!"});
+        var params = {
+            Bucket: 'ProfileImages', // your bucket name
+            Key:  uuid.v4(), // this generates a unique identifier
+            Expires: 100, // number of seconds in which image must be posted
+            // ContentType: 'image/jpeg' // must match "Content-Type" header of Alamofire PUT request
+
+        };
+
+        res.send({putURL: s3.getSignedUrl('putObject', params), getURL: s3.getSignedUrl('getObject', params)})
+
     })
 
 }
+
+

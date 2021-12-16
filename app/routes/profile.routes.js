@@ -10,6 +10,6 @@ module.exports = function (app) {
         next();
     });
 
-    app.post("/api/profile/updateProfileImage", authJwt.verifyToken, controller.updateProfileImage);
+    app.get("/api/profile/profileImageLink", authJwt.verifyToken, controller.ProfileImageLink);
 
 }
