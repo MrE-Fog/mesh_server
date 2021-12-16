@@ -33,6 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = require("./app/models");
 require('./app/routes/auth.routes')(app);
+require('./app/routes/profile.routes')(app);
 
 db.mongoose
     .connect(`mongodb://127.0.0.1:27017/mesh_db`, {
