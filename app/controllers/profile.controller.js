@@ -23,9 +23,20 @@ exports.ProfileImageLink = (req, res) => {
             return;
         }
 
+        profileImageURI = ""
+        if (!user.profileImage) {
+            profileImageURI = uuid.v4();
+            User.updateOne({"_id": req.userId}, {"profileImage": profileImageURI}, {upsert: true})
+        } else {
+            profileImageURI = user.profileImage
+        }
+
+
         var params = {
             Bucket: 'ProfileImages', // your bucket name
-            Key:  uuid.v4(), // this generates a unique identifier
+
+
+            Key:  profileImageURI, // this generates a unique identifier
             Expires: 100, // number of seconds in which image must be posted
             // ContentType: 'image/jpeg' // must match "Content-Type" header of Alamofire PUT request
 
