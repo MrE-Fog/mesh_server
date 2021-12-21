@@ -19,12 +19,15 @@ exports.ProfileImageLink = (req, res) => {
         }
 
         if (!profile) {
-            res.status(500).send({message: "Profile Not Found"});
-            return;
+            profile = new Profile({
+                user_id: req.userId,
+                username: req.body.username,
+                profileImage: ""
+            });
         }
 
         profileImageURI = ""
-        if (!profile.profileImage) {
+        if (!profile.profileImage || profile.profileImage == "") {
             profileImageURI = uuid.v4();
             profile.profileImage = profileImageURI;
             await profile.save();
