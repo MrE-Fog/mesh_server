@@ -1,29 +1,36 @@
 const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
+const Profile = db.profile
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
     const user = new User({
-        username: req.body.username,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8)
+    });
 
+    const profile = new Profile({
+        user_id: user._id,
+        username: req.body.username,
+        profileImage: ""
     });
 
     user.save((err) => {
         if (err) {
             res.status(500).send({ message: err });
-
-
-        } else {
-
-                    res.send({ message: "User was registered successfully!" });
-            }
-
+        }
     });
+
+    profile.save((err) => {
+        if (err) {
+            res.status(500).send({ message: err });
+        }
+    });
+
+    res.send({ message: "User was registered successfully!" });
 };
 
 exports.signin = (req, res) => {
@@ -59,7 +66,6 @@ exports.signin = (req, res) => {
 
             res.status(200).send({
                 id: user._id,
-                username: user.username,
                 email: user.email,
                 accessToken: token
             });
