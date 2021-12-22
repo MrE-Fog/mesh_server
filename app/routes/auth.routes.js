@@ -22,15 +22,6 @@ module.exports = function(app) {
 
     app.post("/api/auth/signin", controller.signin);
 
-    app.get("/api/auth/me", authJwt.verifyToken , async (req, res) => {
-        try {
-            // request.user is getting fetched from Middleware after token authentication
-            // const user = await User.findById(req.userId);
-            const profile = await Profile.findOne({ user_id: req.userId});
-            return res.json(profile);
-        } catch (e) {
-            res.send({ message: "Error in Fetching user" });
-        }
-    });
+    app.get("/api/auth/me", authJwt.verifyToken , controller.me);
 
 };
