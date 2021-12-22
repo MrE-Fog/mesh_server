@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const https = require('https');
 const fs = require('fs');
+const DBConfig = require('./app/config/db.config');
 
 
 // const options = {
@@ -36,7 +37,7 @@ require('./app/routes/auth.routes')(app);
 require('./app/routes/profile.routes')(app);
 
 db.mongoose
-    .connect(`mongodb://127.0.0.1:27017/mesh_db`, {
+    .connect(DBConfig.DBLink, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
