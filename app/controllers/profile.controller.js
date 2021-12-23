@@ -3,7 +3,8 @@ var aws = require('aws-sdk');
 var config = require("../config/auth.config")
 var uuid = require('uuid');
 
-const Profile = db.profile
+const Profile = db.profile.Profile;
+const DescriptionImage = db.profile.DescriptionImage;
 
 aws.config.signatureVersion = 'v4'
 var ep = new aws.Endpoint('https://mesh-storage.sfo3.digitaloceanspaces.com');
@@ -19,11 +20,7 @@ exports.ProfileImageLink = (req, res) => {
         }
 
         if (!profile) {
-            profile = new Profile({
-                user_id: req.userId,
-                username: req.body.username,
-                profileImage: ""
-            });
+           res.status(500).send({message: "User not Found"});
         }
 
         profileImageURI = ""
@@ -51,3 +48,36 @@ exports.ProfileImageLink = (req, res) => {
 }
 
 
+exports.addDescriptionImage = (req, res) => {
+    Profile.findOne({ user_id: req.userId}).exec(async (err, profile) => {
+        if (err) {
+            res.status(500).send({message: err});
+            return;
+        }
+
+        if (!profile) {
+           res.status(500).send({message: "User not Found"});
+        }
+
+        descriptionImage = new DescriptionImage({
+            imageURI: uuid.v4(),
+            description: req.body.description
+        });
+
+        await descriptionImage.save();
+
+        profile.descriptionImages.push(descriptionImage._id);
+        profile.save()
+        
+        var params = {
+            Bucket: 'ProfileDescriptionImages', // your bucket name
+            Key: descriptionImage.imageURI, // this generates a unique identifier
+            Expires: 100, // number of seconds in which image must be posted
+            // ContentType: 'image/jpeg' // must match "Content-Type" header of Alamofire PUT request
+
+        };
+
+        res.send({putURL: s3.getSignedUrl('putObject', params), getURL: s3.getSignedUrl('getObject', params)})
+
+    })
+}

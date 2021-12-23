@@ -1,12 +1,20 @@
 const mongoose = require("mongoose");
 
+const DescriptionImage = mongoose.model("DescriptionImage", 
+    new mongoose.Schema({
+        imageURI: String, 
+        description: String,
+    }));
+
 const Profile = mongoose.model(
     "Profile",
     new mongoose.Schema({
         user_id: String, 
         username: String,
         profileImage: String,
+        descriptionImages: [String],
     }, {strict: false})
 );
 
-module.exports = Profile;
+exports.DescriptionImage = DescriptionImage;
+exports.Profile = Profile;
