@@ -81,3 +81,39 @@ exports.addDescriptionImage = (req, res) => {
 
     })
 }
+
+exports.getAllDescriptionImages = (req, res) => {
+    Profile.findOne({ user_id: req.userId}).exec(async (err, profile) => {
+        if (err) {
+            res.status(500).send({message: err});
+            return;
+        }
+
+        if (!profile.descriptionImages) {
+           res.status(500).send({message: "User has no description images."});
+           return
+        }
+
+        
+        var resultArray = [];
+       for (const element of profile.descriptionImages) {
+            await DescriptionImage.findById(element).then((descriptionImage) => {
+
+
+            var params = {
+                Bucket: 'ProfileDescriptionImages', // your bucket name
+                Key: descriptionImage.imageURI, // this generates a unique identifier
+                Expires: 100, // number of seconds in which image must be posted
+            };
+
+            let description = descriptionImage.description
+
+            resultArray.push({description: s3.getSignedUrl('getObject', params)})
+            console.log("pushed one imageDescription")
+            })
+        }
+        
+        res.send(resultArray);
+    })
+
+}

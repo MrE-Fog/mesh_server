@@ -14,4 +14,6 @@ module.exports = function (app) {
 
     app.get("/api/profile/addDescriptionImage", authJwt.verifyToken, controller.addDescriptionImage);
 
+    app.get("/api/profile/getAllDescriptionImages", authJwt.verifyToken, controller.getAllDescriptionImages);
+
 }
