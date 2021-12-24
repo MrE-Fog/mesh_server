@@ -96,7 +96,7 @@ exports.getAllDescriptionImages = (req, res) => {
 
         
         var resultArray = [];
-       for (const element of profile.descriptionImages) {
+        for (const element of profile.descriptionImages) {
             await DescriptionImage.findById(element).then((descriptionImage) => {
 
 
@@ -108,7 +108,11 @@ exports.getAllDescriptionImages = (req, res) => {
 
             let description = descriptionImage.description
 
-            resultArray.push({description: s3.getSignedUrl('getObject', params)})
+            resultArray.push({
+                "getURL": s3.getSignedUrl('getObject', params), 
+                "putURL": s3.getSignedUrl('putObject', params),
+                "description": description,
+            })
             console.log("pushed one imageDescription")
             })
         }
