@@ -112,12 +112,11 @@ exports.getAllDescriptionImages = (req, res) => {
                 "getURL": s3.getSignedUrl('getObject', params), 
                 "putURL": s3.getSignedUrl('putObject', params),
                 "description": description,
-            })
-            console.log("pushed one imageDescription")
+                })
             })
         }
         
-        res.send(resultArray);
+        res.send({"models": resultArray});
     })
 
 }
