@@ -46,7 +46,7 @@ exports.ProfileImageLink = (req, res) => {
 }
 
 
-exports.addDescriptionImage = (req, res) => {
+exports.addDescriptionToImage = (req, res) => {
     Profile.findOne({ user_id: req.userId}).exec(async (err, profile) => {
         if (err) {
             res.status(500).send({message: err});
@@ -63,27 +63,11 @@ exports.addDescriptionImage = (req, res) => {
             return;
         }
         
-
-        descriptionImage = new DescriptionImage({
-            imageURI: uuid.v4(),
-            description: req.body.description
-        });
-
-        await descriptionImage.save();
-
-        console.log(`specified index: ${req.body.index}`);
-        profile.descriptionImages[req.body.index] = descriptionImage._id;
-        profile.save()
-        
-        var params = {
-            Bucket: 'ProfileImages', // your bucket name
-            Key: descriptionImage.imageURI, // this generates a unique identifier
-            Expires: 100, // number of seconds in which image must be posted
-            // ContentType: 'image/jpeg' // must match "Content-Type" header of Alamofire PUT request
-
-        };
-
-        res.send({putURL: s3.getSignedUrl('putObject', params), getURL: s3.getSignedUrl('getObject', params)})
+        DescriptionImage.findById(profile.descriptionImages[req.body.index]).then(async (descriptionImage) => {
+            descriptionImage.description = req.body.description
+            await descriptionImage.save()
+            res.send("success!")
+        })        
 
     })
 }

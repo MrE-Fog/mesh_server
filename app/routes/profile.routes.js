@@ -12,7 +12,7 @@ module.exports = function (app) {
 
     app.get("/api/profile/profileImageLink", authJwt.verifyToken, controller.ProfileImageLink);
 
-    app.get("/api/profile/addDescriptionImage", authJwt.verifyToken, controller.addDescriptionImage);
+    app.post("/api/profile/addDescriptionToImage", authJwt.verifyToken, controller.addDescriptionToImage);
 
     app.get("/api/profile/getAllDescriptionImages", authJwt.verifyToken, controller.getAllDescriptionImages);
 
