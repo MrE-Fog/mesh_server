@@ -2,11 +2,13 @@ const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Profile = db.profile.Profile
+const DescriptionImage = db.profile.DescriptionImage;
 
+var uuid = require('uuid');
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
     const user = new User({
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8)
@@ -18,15 +20,35 @@ exports.signup = (req, res) => {
         profileImage: ""
     });
 
+    for (var i = 0; i < 3; i++) {
+        let generatedURI = uuid.v4()
+        descriptionImage = new DescriptionImage({
+                imageURI: generatedURI,
+                description: "You haven't added any description yet!"
+        });
+        await descriptionImage.save();
+        profile.descriptionImages.push(descriptionImage._id);
+
+        
+        if (i == 0) {
+            profile.profileImage = generatedURI
+            console.log(generatedURI);
+        }
+    }
+
+    
+
     user.save((err) => {
         if (err) {
             res.status(500).send({ message: err });
+            return
         }
     });
 
     profile.save((err) => {
         if (err) {
             res.status(500).send({ message: err });
+            return
         }
     });
 

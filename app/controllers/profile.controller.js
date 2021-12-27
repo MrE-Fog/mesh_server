@@ -21,16 +21,14 @@ exports.ProfileImageLink = (req, res) => {
 
         if (!profile) {
            res.status(500).send({message: "User not Found"});
+           return
         }
 
-        profileImageURI = ""
-        if (!profile.profileImage || profile.profileImage == "") {
-            profileImageURI = uuid.v4();
-            profile.profileImage = profileImageURI;
-            await profile.save();
-        } else {
-            profileImageURI = profile.profileImage
-        }
+        profileImageURI = profile.profileImage 
+        if (!profileImageURI) {
+            res.status(500).send({message: "Internal Error"});
+            return
+        } 
 
 
         var params = {
@@ -78,7 +76,7 @@ exports.addDescriptionImage = (req, res) => {
         profile.save()
         
         var params = {
-            Bucket: 'ProfileDescriptionImages', // your bucket name
+            Bucket: 'ProfileImages', // your bucket name
             Key: descriptionImage.imageURI, // this generates a unique identifier
             Expires: 100, // number of seconds in which image must be posted
             // ContentType: 'image/jpeg' // must match "Content-Type" header of Alamofire PUT request
@@ -109,12 +107,14 @@ exports.getAllDescriptionImages = (req, res) => {
 
 
             var params = {
-                Bucket: 'ProfileDescriptionImages', // your bucket name
+                Bucket: 'ProfileImages', // your bucket name
                 Key: descriptionImage.imageURI, // this generates a unique identifier
                 Expires: 100, // number of seconds in which image must be posted
             };
 
             let description = descriptionImage.description
+
+            console.log(descriptionImage.imageURI,);
 
             resultArray.push({
                 "getURL": s3.getSignedUrl('getObject', params), 
