@@ -57,7 +57,14 @@ exports.addDescriptionImage = (req, res) => {
 
         if (!profile) {
            res.status(500).send({message: "User not Found"});
+           return;
         }
+
+        if (!profile.descriptionImages[req.body.index]) {
+            res.status(500).send({message: "Invalid index"});
+            return;
+        }
+        
 
         descriptionImage = new DescriptionImage({
             imageURI: uuid.v4(),
@@ -66,7 +73,8 @@ exports.addDescriptionImage = (req, res) => {
 
         await descriptionImage.save();
 
-        profile.descriptionImages.push(descriptionImage._id);
+        console.log(`specified index: ${req.body.index}`);
+        profile.descriptionImages[req.body.index] = descriptionImage._id;
         profile.save()
         
         var params = {
