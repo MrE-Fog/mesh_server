@@ -48,6 +48,8 @@ exports.ProfileImageLink = (req, res) => {
 
 exports.addDescriptionToImage = (req, res) => {
     Profile.findOne({ user_id: req.userId}).exec(async (err, profile) => {
+        console.log("Request to add description to image received")
+
         if (err) {
             res.status(500).send({message: err});
             return;
@@ -66,7 +68,7 @@ exports.addDescriptionToImage = (req, res) => {
         DescriptionImage.findById(profile.descriptionImages[req.body.index]).then(async (descriptionImage) => {
             descriptionImage.description = req.body.description
             await descriptionImage.save()
-            res.send("success!")
+            res.send({"result": "success!"})
         })        
 
     })
@@ -97,8 +99,6 @@ exports.getAllDescriptionImages = (req, res) => {
             };
 
             let description = descriptionImage.description
-
-            console.log(descriptionImage.imageURI,);
 
             resultArray.push({
                 "getURL": s3.getSignedUrl('getObject', params), 

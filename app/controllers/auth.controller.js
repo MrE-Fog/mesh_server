@@ -32,7 +32,6 @@ exports.signup = async (req, res) => {
         
         if (i == 0) {
             profile.profileImage = generatedURI
-            console.log(generatedURI);
         }
     }
 
