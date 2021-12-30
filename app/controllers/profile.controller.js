@@ -108,7 +108,7 @@ exports.getAllDescriptionImages = (req, res) => {
             })
         }
         
-        res.send({"models": resultArray});
+        res.send({"models": resultArray, "name": profile.username});
     })
 
 }
