@@ -123,7 +123,7 @@ exports.fetchDiscoverImagesURLWithDescriptions = async (req, res) => {
             return;
         }
 
-        if (!profile.descriptionImages) {
+        if (!("descriptionImages" in profile)) {
            res.status(500).send({message: "User has no description images."});
            return
         }
