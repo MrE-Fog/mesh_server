@@ -112,3 +112,45 @@ exports.getAllDescriptionImages = (req, res) => {
     })
 
 }
+
+exports.fetchDiscoverImagesURLWithDescriptions = async (req, res) => {
+    // Return a random user
+    var random = Math.floor(Math.random() * await Profile.countDocuments({}))
+
+    Profile.findOne({ user_id: { $ne: req.userId } }).skip(random).exec(async (err, profile) => {
+        if (err) {
+            res.status(500).send({message: err});
+            return;
+        }
+
+        if (!profile.descriptionImages) {
+           res.status(500).send({message: "User has no description images."});
+           return
+        }
+
+        
+        var resultArray = [];
+        for (const element of profile.descriptionImages) {
+            await DescriptionImage.findById(element).then((descriptionImage) => {
+
+
+            var params = {
+                Bucket: 'ProfileImages', // your bucket name
+                Key: descriptionImage.imageURI, // this generates a unique identifier
+                Expires: 100, // number of seconds in which image must be posted
+            };
+
+            let description = descriptionImage.description
+
+            resultArray.push({
+                "getURL": s3.getSignedUrl('getObject', params), 
+                "putURL": s3.getSignedUrl('putObject', params),
+                "description": description,
+                })
+            })
+        }
+        
+        res.send({"models": resultArray, "name": profile.username});
+    })
+
+}
