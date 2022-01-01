@@ -23,5 +23,6 @@ module.exports = function(app) {
     app.post("/api/auth/signin", controller.signin);
 
     app.get("/api/auth/me", authJwt.verifyToken , controller.me);
+    app.get("/api/auth/challenge", authJwt.verifyToken , controller.challenge);
 
 };

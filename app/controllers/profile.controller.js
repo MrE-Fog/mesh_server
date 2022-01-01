@@ -115,19 +115,13 @@ exports.getAllDescriptionImages = (req, res) => {
 
 exports.fetchDiscoverImagesURLWithDescriptions = async (req, res) => {
     // Return a random user
-    var random = Math.floor(Math.random() * await Profile.countDocuments({}))
+    var random = Math.floor(Math.random() * ((await Profile.countDocuments({})) - 2))
 
-    Profile.findOne({ user_id: { $ne: req.userId } }).skip(random).exec(async (err, profile) => {
+    Profile.findOne({ user_id: { $nin: ["61ca7e463048a37148814b65", req.userId] } }).skip(random).exec(async (err, profile) => {
         if (err) {
             res.status(500).send({message: err});
             return;
         }
-
-        if (!("descriptionImages" in profile)) {
-           res.status(500).send({message: "User has no description images."});
-           return
-        }
-
         
         var resultArray = [];
         for (const element of profile.descriptionImages) {

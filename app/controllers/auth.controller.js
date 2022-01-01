@@ -24,7 +24,7 @@ exports.signup = async (req, res) => {
         let generatedURI = uuid.v4()
         descriptionImage = new DescriptionImage({
                 imageURI: generatedURI,
-                description: "You haven't added any description yet!"
+                description: ""
         });
         await descriptionImage.save();
         profile.descriptionImages.push(descriptionImage._id);
@@ -102,4 +102,9 @@ exports.me = async (req, res) => {
     } catch (e) {
         res.send({ message: "Error in Fetching user" });
     }
+}
+
+
+exports.challenge = (req, res) => {
+    res.send("success")
 }
