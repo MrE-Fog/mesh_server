@@ -93,6 +93,7 @@ exports.signin = (req, res) => {
         });
 };
 
+// Will be deprecated
 exports.me = async (req, res) => {
     try {
         // request.user is getting fetched from Middleware after token authentication

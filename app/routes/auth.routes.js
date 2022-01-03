@@ -22,7 +22,9 @@ module.exports = function(app) {
 
     app.post("/api/auth/signin", controller.signin);
 
+    // Will be deprecated, replaced with auth/challenge
     app.get("/api/auth/me", authJwt.verifyToken , controller.me);
+
     app.get("/api/auth/challenge", authJwt.verifyToken , controller.challenge);
 
 };
