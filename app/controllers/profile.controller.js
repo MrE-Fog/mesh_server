@@ -108,7 +108,10 @@ exports.getAllDescriptionImages = (req, res) => {
             })
         }
         
-        res.send({"models": resultArray, "name": profile.username});
+        res.send({"models": resultArray, 
+        "name": profile.username,
+        "linkedInLink": "", 
+        "contactNumer": ""});
     })
 
 }
@@ -144,7 +147,9 @@ exports.fetchDiscoverImagesURLWithDescriptions = async (req, res) => {
             })
         }
         
-        res.send({"models": resultArray, "name": profile.username});
+        res.send({"models": resultArray, 
+        "name": profile.username,
+        "linkedInLink": ""});
     })
 
 }
