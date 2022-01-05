@@ -146,10 +146,15 @@ exports.fetchDiscoverImagesURLWithDescriptions = async (req, res) => {
                 })
             })
         }
+
+        if (!profile.linkedInLink) {
+            profile.linkedInLink = ""
+        }
         
         res.send({"models": resultArray, 
         "name": profile.username,
-        "linkedInLink": ""});
+        "linkedInLink": profile.linkedInLink, 
+        });
     })
 
 }
