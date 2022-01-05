@@ -110,7 +110,7 @@ exports.getAllDescriptionImages = (req, res) => {
         
         res.send({"models": resultArray, 
         "name": profile.username,
-        "linkedInLink": "", 
+        "linkedInLink": profile.linkedInLink, 
         "contactNumer": ""});
     })
 
@@ -163,4 +163,28 @@ exports.me = async (req, res) => {
     } catch (e) {
         res.send({ message: "Error in Fetching user" });
     }
+}
+
+exports.updateMe = async (req, res) => {
+    Profile.findOne({ user_id: req.userId}).exec(async (err, profile) => {
+        console.log("Request to update profile to image received")
+
+        if (err) {
+            res.status(500).send({message: err});
+            return;
+        }
+
+        if (!profile) {
+           res.status(500).send({message: "User not Found"});
+           return;
+        }
+
+        profile.username = req.body.name
+        profile.linkedInLink = req.body.linkedInLink
+        profile.save()
+        
+        res.send({"result": "success!"})
+              
+
+    })
 }

@@ -11,6 +11,7 @@ const Profile = mongoose.model(
     new mongoose.Schema({
         user_id: String, 
         username: String,
+        linkedInLink: String,
         profileImage: String,
         descriptionImages: [String],
     }, {strict: false})

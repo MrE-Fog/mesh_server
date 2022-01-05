@@ -19,4 +19,6 @@ module.exports = function (app) {
     app.get("/api/profile/fetchDiscoverImagesURLWithDescriptions", authJwt.verifyToken, controller.fetchDiscoverImagesURLWithDescriptions);
 
     app.get("/api/profile/me", authJwt.verifyToken , controller.me);
+
+    app.post("/api/profile/updateMe", authJwt.verifyToken , controller.updateMe);
 }
