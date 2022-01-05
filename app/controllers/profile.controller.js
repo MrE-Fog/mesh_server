@@ -74,7 +74,7 @@ exports.addDescriptionToImage = (req, res) => {
     })
 }
 
-exports.getAllDescriptionImages = (req, res) => {
+exports.getMyProfileInfo = (req, res) => {
     Profile.findOne({ user_id: req.userId}).exec(async (err, profile) => {
         if (err) {
             res.status(500).send({message: err});
@@ -144,7 +144,7 @@ exports.fetchDiscoverImagesURLWithDescriptions = async (req, res) => {
             let description = descriptionImage.description
 
             resultArray.push({
-                "getURL": s3.getSignedUrl('getObject', params), 
+                "getURL": s3.getSignedUrl('getObject', params).replace("digitaloceanspaces.com", "cdn.digitaloceanspaces.com"), 
                 "putURL": s3.getSignedUrl('putObject', params),
                 "description": description,
                 })

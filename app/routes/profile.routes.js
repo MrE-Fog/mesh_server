@@ -14,7 +14,9 @@ module.exports = function (app) {
 
     app.post("/api/profile/addDescriptionToImage", authJwt.verifyToken, controller.addDescriptionToImage);
 
-    app.get("/api/profile/getAllDescriptionImages", authJwt.verifyToken, controller.getAllDescriptionImages);
+    app.get("/api/profile/getAllDescriptionImages", authJwt.verifyToken, controller.getMyProfileInfo);
+    app.get("/api/profile/getMyProfileInfo", authJwt.verifyToken, controller.getMyProfileInfo);
+
 
     app.get("/api/profile/fetchDiscoverImagesURLWithDescriptions", authJwt.verifyToken, controller.fetchDiscoverImagesURLWithDescriptions);
 
