@@ -86,6 +86,10 @@ exports.getAllDescriptionImages = (req, res) => {
            return
         }
 
+        if (!profile.linkedInLink) {
+            profile.linkedInLink = ""
+        }
+
         
         var resultArray = [];
         for (const element of profile.descriptionImages) {
